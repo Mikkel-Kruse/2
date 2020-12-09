@@ -1,4 +1,4 @@
-import pygame, sys, os, random
+import pygame
 
 global animation_frames
 animation_frames = {}
