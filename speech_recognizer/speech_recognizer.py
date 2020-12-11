@@ -22,10 +22,10 @@ def act_on_voice_command(microphone, speech_recognizer):
 
         if 'walk' in str(text):
             print('ok')
-            moving_right = True
+            #moving_right = True
         elif 'stop' in str(text):
             print('ok s')
-            moving_right = False
+            #moving_right = False
         else:
             print('false')
 

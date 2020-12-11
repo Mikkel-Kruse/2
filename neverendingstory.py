@@ -7,20 +7,16 @@ from collision_move import move
 from threading import Thread
 from setup.setup_screen import Screen
 import speech_recognition as sr
+from setup.setup_sound import Sound
+from move.setup_move import MovePlayer
+from move.loop_make_player_move_controle import move_player_controle
+from move.loop_make_player_move_physics import move_player_physics
 
 clock = pygame.time.Clock()
 
-pygame.mixer.pre_init(44100, -16, 2, 512) # changing the sound
-pygame.init()
-pygame.mixer.set_num_channels(64)
-
 screen = Screen()
-
-
-moving_right = False
-moving_left = False
-player_y_momentum = 0
-air_timer = 0
+sound = Sound()
+move_player = MovePlayer()
 
 scroll = [0, 0]
 
@@ -73,15 +69,6 @@ plant_img.set_colorkey((255,255,255))
 tile_index = {1:grass_img, 2:dirt_img, 3:plant_img}
 
 
-jump_sound = pygame.mixer.Sound('utils/jump.wav')
-jump_sound.set_volume(0.4)
-grass_sounds = [pygame.mixer.Sound('utils/grass_0.wav'), pygame.mixer.Sound('utils/grass_1.wav')]
-grass_sounds[0].set_volume(0.2)
-grass_sounds[1].set_volume(0.2)
-
-pygame.mixer.music.load('utils/music.wav')
-pygame.mixer.music.play(-1)
-
 player_man_rect = pygame.Rect(100, 100, 5, 13)
 
 background_objects = [[0.25, [120, 10, 70, 400]], [0.25, [280, 30,40,400]], [0.5, [30, 40, 40, 400]], [0.5, [130, 90, 100, 400]], [0.5, [300, 80, 120, 400]]]
@@ -116,16 +103,18 @@ while True:
                 if tile[1] in [1,2]:
                     tile_rects.append(pygame.Rect(tile[0][0]*16, tile[0][1]*16, 16, 16)) # adding til 1 and 2 to collision
 
-
     player_man_movement = [0, 0]
-    if moving_right:
+
+    #move_player_physics(move_player)
+
+    if move_player.moving_right:
         player_man_movement[0] += 2
-    if moving_left:
+    if move_player.moving_left:
         player_man_movement[0] -= 2
-    player_man_movement[1] += player_y_momentum
-    player_y_momentum += 0.2
-    if player_y_momentum > 3:
-        player_y_momentum = 3
+    player_man_movement[1] += move_player.player_y_momentum
+    move_player.player_y_momentum += 0.2
+    if move_player.player_y_momentum > 3:
+        move_player.player_y_momentum = 3
 
     if player_man_movement[0] > 0:
         player_action,player_frame = change_action(player_action,player_frame,'run')
@@ -139,14 +128,14 @@ while True:
     player_man_rect, collisions = move(player_man_rect, player_man_movement, tile_rects)
 
     if collisions['bottom']:
-        player_y_momentum = 0
-        air_timer = 0
+        move_player.player_y_momentum = 0
+        move_player.air_timer = 0
         if player_man_movement[0] != 0:
             if grass_sound_timer == 0:
                 grass_sound_timer = 30
-                random.choice(grass_sounds).play()
+                random.choice(sound.grass_sounds).play()
     else:
-        air_timer += 1
+        move_player.air_timer += 1
 
     player_frame += 1
     if player_frame >= len(animation_database[player_action]):
@@ -154,6 +143,8 @@ while True:
     player_img_id = animation_database[player_action][player_frame]
     player_man_img = animation_frames[player_img_id]
     screen.display.blit(pygame.transform.flip(player_man_img,player_flip, False), (player_man_rect.x - scroll[0], player_man_rect.y - scroll[1]))
+
+    #move_player_controle()
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -165,18 +156,18 @@ while True:
             if event.key == K_e:
                 pygame.mixer.music.play(-1)
             if event.key == K_RIGHT:
-                moving_right = True
+                move_player.moving_right = True
             if event.key == K_LEFT:
-                moving_left = True
+                move_player.moving_left = True
             if event.key == K_UP:
-                if air_timer < 6:
-                    jump_sound.play()
-                    player_y_momentum = -5
+                if move_player.air_timer < 6:
+                    sound.jump_sound.play()
+                    move_player.player_y_momentum = -5
         if event.type == KEYUP:
-            if event.key == K_RIGHT:              
-                moving_right = False
+            if event.key == K_RIGHT:
+                move_player.moving_right = False
             if event.key == K_LEFT:
-                moving_left = False
+                move_player.moving_left = False
 
     screen.screen.blit(pygame.transform.scale(screen.display, screen.window_size), (0, 0))
     pygame.display.update()

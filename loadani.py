@@ -19,7 +19,7 @@ def load_animation(path, frame_durations):
         n += 1
     return animation_frame_data
 
-animation_database = {}
+#animation_database = {}
 
 #animation_database['run'] = load_animation('player_animations/run',[7, 7])
 #animation_database['idle'] = load_animation('player_animations/idle',[7, 7, 40])
