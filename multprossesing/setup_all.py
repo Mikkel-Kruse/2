@@ -9,8 +9,7 @@ from setup.setup_screen import Screen
 import speech_recognition as sr
 from setup.setup_sound import Sound
 from move.setup_move import MovePlayer
-#from move.loop_make_player_move_physics import move_player_physics
-#from move.loop_make_player_move_controle import move_player_controle
+
 def setup_all():
     clock = pygame.time.Clock()
 

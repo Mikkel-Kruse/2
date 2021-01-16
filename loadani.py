@@ -1,10 +1,6 @@
 import pygame
 
-global animation_frames
-animation_frames = {}
-
-def load_animation(path, frame_durations):
-    global animation_frames
+def load_animation(path, frame_durations, animation_frames):
     animation_name = path.split('/')[-1]
     animation_frame_data = []
     n = 0
@@ -17,8 +13,7 @@ def load_animation(path, frame_durations):
         for i in range(frame):
             animation_frame_data.append(animation_frame_id)
         n += 1
-    return animation_frame_data
-
+    return animation_frame_data, animation_frames
 #animation_database = {}
 
 #animation_database['run'] = load_animation('player_animations/run',[7, 7])

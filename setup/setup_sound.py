@@ -13,3 +13,4 @@ class Sound:
         self.grass1_volume = self.grass_sounds[1].set_volume(0.2)
         self.game_music = pygame.mixer.music.load('utils/music.wav')
         self.game_music_loop = pygame.mixer.music.play(-1)
+        self.grass_sound_timer = 0

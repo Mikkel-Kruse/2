@@ -4,9 +4,9 @@ from setup.setup_sound import Sound
 from move.setup_move import MovePlayer
 
 sound = Sound()
-move_player = MovePlayer()
 
-def move_player_controle():
+def move_player_controle(move_player):
+
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -29,4 +29,3 @@ def move_player_controle():
                 move_player.moving_right = False
             if event.key == K_LEFT:
                 move_player.moving_left = False
-    return move_player.moving_right, move_player.moving_left, move_player.player_y_momentum
