@@ -32,6 +32,7 @@ class GameController:
         self.animation_frames = {}
         self.clock = pygame.time.Clock()
         self.setup_game()
+        self.speech_commander.start_commander()
 
     def setup_game(self):
         self.animation_database['run'], self.animation_frames = load_animation('player_animations/run', [7, 7], self.animation_frames)
@@ -98,6 +99,12 @@ class GameController:
             if not self.queue.empty():
                 text = self.queue.get()
                 print(text)
+                if 'walk' in text:
+                    self.move_player.moving_right = True
+                if 'stop' in text:
+                    self.move_player.moving_right = False
+                if 'jump' in text:
+                    self.move_player.player_y_momentum = -10
 
 
 if __name__ == '__main__':

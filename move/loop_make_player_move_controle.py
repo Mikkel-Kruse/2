@@ -2,8 +2,8 @@ import pygame, sys
 from pygame.locals import *
 from setup.setup_sound import Sound
 from move.setup_move import MovePlayer
-
 sound = Sound()
+
 
 def move_player_controle(move_player):
 
