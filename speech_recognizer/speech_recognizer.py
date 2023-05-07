@@ -19,22 +19,40 @@ class SpeechCommander:
                 self.speech_recognizer.adjust_for_ambient_noise(source)
                 data = self.speech_recognizer.listen(source)
                 """
-        text = self.speech_recognizer.recognize_google(audio, language='en-IN', show_all=False)
+        #text = self.speech_recognizer.recognize_google(audio, language='en-IN', show_all=False)
+        try:
+            text = self.speech_recognizer.recognize_google(audio, show_all=False)
+        except sr.UnknownValueError:
+            print('unknown')
+            return
 
-        if 'walk' in str(text):
+        valid_commands = ['right', 'left', 'stop', 'jump']
+        if any(word in text.lower() for word in valid_commands):
+            print(text)
+            self.queue.put(text)
+        print(text)
+        #print(text)
+        '''if 'right' in str(text):
+            #print(text)
+            self.queue.put(text)
+        elif 'left' in str(text):
             #print(text)
             self.queue.put(text)
         elif 'stop' in str(text):
             #print(text)
             self.queue.put(text)
-        else:
+        elif 'jump' in str(text):
             #print(text)
             self.queue.put(text)
+        else:
+            #print(text)
+            self.queue.put(text)'''
 
     def start_commander(self):
         with self.microphone as source:
-            self.speech_recognizer.adjust_for_ambient_noise(source)
-        self.speech_recognizer.pause_threshold = 0.8
+            self.speech_recognizer.adjust_for_ambient_noise(source, duration=1)
+        self.speech_recognizer.energy_threshold = 10
+        #self.speech_recognizer.pause_threshold = 0.8
         self.stop_listening = self.speech_recognizer.listen_in_background(self.microphone, self.act_on_voice_command)
 
     """
@@ -50,3 +68,5 @@ if __name__ == '__main__':
     queue = 0
     speech = SpeechCommander(queue)
     speech.start_commander()
+    while True:
+        continue

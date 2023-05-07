@@ -1,5 +1,5 @@
 import pygame, sys, random
-from speech_recognizer.speech_recognizer import act_on_voice_command
+#from speech_recognizer.speech_recognizer import act_on_voice_command
 from pygame.locals import *
 from opdatermap import generate_chunk
 from changeaction import change_action

@@ -99,9 +99,14 @@ class GameController:
             if not self.queue.empty():
                 text = self.queue.get()
                 print(text)
-                if 'walk' in text:
+                if 'right' in text:
+                    self.move_player.moving_left = False
                     self.move_player.moving_right = True
+                if 'left' in text:
+                    self.move_player.moving_right = False
+                    self.move_player.moving_left = True
                 if 'stop' in text:
+                    self.move_player.moving_left = False
                     self.move_player.moving_right = False
                 if 'jump' in text:
                     self.move_player.player_y_momentum = -10
